@@ -1,6 +1,6 @@
-#!/bin/env python3
+#!/bin/env python
 from hcloud_helper import client
 
 servers = client.servers.get_all()
 for server in servers:
-    print(str(server))
+    print(server.name, server.public_net.ipv4.ip)
