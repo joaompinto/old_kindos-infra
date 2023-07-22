@@ -1,4 +1,6 @@
-## Disclosure of ongoing costs to keep this infra running
+## Ongoing costs to keep this infra running
+
+Running on hetzner cloud with the following specs:
 
 | vCPU | RAM     | Disk | Traffic | Price         |
 |:----:|:-------:|:----:|:-------:|---------------|
