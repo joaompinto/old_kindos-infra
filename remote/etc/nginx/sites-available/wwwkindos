@@ -1,0 +1,33 @@
+upstream app_server {
+    server unix:/home/wwwkindos/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/www.kindos.org/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/www.kindos.org/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+    # add here the ip address of your server
+    # or a domain pointing to that ip (like example.com or www.example.com)
+    server_name www.kindos.org;
+
+    keepalive_timeout 5;
+
+    access_log /home/wwwkindos/logs/nginx-access.log;
+    error_log /home/wwwkindos/logs/nginx-error.log;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        if (!-f $request_filename) {
+            proxy_pass http://app_server;
+            break;
+        }
+	}
+}
